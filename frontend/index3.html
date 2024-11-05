@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambulance Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 15px;
+            color: white;
+        }
+
+        .logo-container img {
+            height: 40px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .auth-container button {
+            margin-left: 10px;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #0056b3;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        #map {
+            flex: 2;
+            height: 100%;
+        }
+
+        .info {
+            flex: 1;
+            padding: 20px;
+            background-color: #ffffff;
+            overflow-y: auto;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .controls button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #0056b3;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        footer .social-icons {
+            list-style: none;
+            padding: 0;
+        }
+
+        footer .social-icons li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        footer .social-icons a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo-container">
+            <img src="ambulance_logo.png" alt="Ambulance Tracker Logo">
+            <span>Ambulance Tracker</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+            </ul>
+        </nav>
+        <div class="auth-container">
+            <button class="sign-in">Sign In</button>
+            <button class="sign-up">Sign Up</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div id="map"></div>
+        <div class="info">
+            <div class="controls">
+                <button id="driver-mode">Driver</button>
+                <button id="patient-mode">Patient</button>
+                <i class="fas fa-home" id="home-btn"></i>
+            </div>
+            <!-- Patient Section -->
+            <div class="patient-info">
+                <h2>Patient Address</h2>
+                <label for="patient-address">Enter Patient Address:</label>
+                <input type="text" id="patient-address" placeholder="Enter address" />
+                <h2>Destination Hospital</h2>
+                <label for="hospital-location">Enter Hospital Location:</label>
+                <input type="text" id="hospital-location" placeholder="Enter hospital location" />
+                <button id="update-location">Update Location</button>
+            </div>
+            <!-- Driver Section -->
+            <div class="driver-info" style="display:none;">
+                <h2>Driver Details</h2>
+                <label for="driver-name">Driver Name:</label>
+                <input type="text" id="driver-name" placeholder="Enter driver name" />
+                <label for="ambulance-number">Ambulance Number:</label>
+                <input type="text" id="ambulance-number" placeholder="Enter ambulance number" />
+                <label for="driver-phone">Driver Phone Number:</label>
+                <input type="text" id="driver-phone" placeholder="Enter phone number" />
+                <h2>Ambulance Details</h2>
+                <textarea id="ambulance-details" rows="4" placeholder="Enter ambulance details"></textarea>
+            </div>
+            <!-- Nearby Hospitals Section -->
+            <div class="hospital-section">
+                <h2>Hospitals Near You</h2>
+                <input type="text" id="nearby-hospital" placeholder="Enter nearby hospital details" />
+                <ul id="hospital-list"></ul>
+            </div>
+            <!-- Price Section -->
+            <div class="price-section">
+                <h2>Estimated Price</h2>
+                <p id="price">Price depends on location and time</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Ambulance Tracker. All Rights Reserved.</p>
+        <ul class="social-icons">
+            <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+            <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+        </ul>
+    </footer>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // Initialize the map and set view to Sion, Mumbai
+        var map = L.map('map').setView([19.0434, 72.8654], 13);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Custom ambulance icon
+        var ambulanceIcon = L.icon({
+            iconUrl: 'https://img.icons8.com/ios-filled/50/000000/ambulance.png',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
+        });
+
+        var socket = io();
+        var ambulanceMarkers = {};
+
+        // Listen for location updates
+        socket.on('location-update', function (data) {
+            var { id, lat, lng, details } = data;
+
+            if (ambulanceMarkers[id]) {
+                ambulanceMarkers[id].setLatLng([lat, lng]);
+            } else {
+                ambulanceMarkers[id] = L.marker([lat, lng], { icon: ambulanceIcon }).addTo(map);
+            }
+
+            // Update the driver info section with the latest ambulance details
+            if (document.querySelector('.driver-info').style.display === 'block') {
+                document.getElementById('ambulance-details').value = details || "No details available";
+            }
+        });
+
+        // Toggle between driver and patient mode
+        document.getElementById('driver-mode').addEventListener('click', function () {
+            document.querySelector('.patient-info').style.display = 'none';
+            document.querySelector('.driver-info').style.display = 'block';
+        });
+
+        document.getElementById('patient-mode').addEventListener('click', function () {
+            document.querySelector('.driver-info').style.display = 'none';
+            document.querySelector('.patient-info').style.display = 'block';
+        });
+
+        // Update hospital list
+        document.getElementById('update-location').addEventListener('click', function () {
+            const address = document.getElementById('patient-address').value;
+            const hospitalLocation = document.getElementById('hospital-location').value;
+            document.getElementById('price').textContent = "Estimated price for " + address + " to " + hospitalLocation;
+            // You can add functionality to search for nearby hospitals and update the list.
+        });
+    </script>
+</body>
+
+</html>

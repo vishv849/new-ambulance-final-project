@@ -1,0 +1,26 @@
+<script>
+    // Update hospital list and send data to the backend
+    document.getElementById('update-location').addEventListener('click', function () {
+        const patientAddress = document.getElementById('patient-address').value;
+        const hospitalLocation = document.getElementById('hospital-location').value;
+
+        // Send data to the backend via a POST request
+        fetch('http://localhost:3000/update-location', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                patientAddress: patientAddress,
+                hospitalLocation: hospitalLocation
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Update the frontend with the received estimated price
+            document.getElementById('price').textContent = `Estimated price for ${patientAddress} to ${hospitalLocation}: ${data.estimatedPrice}`;
+            console.log('Backend response:', data);
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>

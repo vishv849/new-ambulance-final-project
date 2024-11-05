@@ -1,0 +1,227 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Header Styles */
+header {
+    background-color: #ffcc00;
+    color: #333;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+header .profile {
+    display: flex;
+    align-items: center;
+}
+
+header .profile img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Navigation Bar Styles */
+nav {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: #444;
+}
+
+/* Main Content Container */
+.container {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+}
+
+/* Left Section for Map and Trip Info */
+.left-section {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+#map {
+    flex: 1;
+    height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trip-info {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trip-info h2 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.trip-info .status {
+    margin: 15px 0;
+    font-size: 1.2em;
+}
+
+.trip-info .status.active {
+    color: green;
+}
+
+.trip-info .status.waiting {
+    color: orange;
+}
+
+.trip-info button {
+    width: 100%;
+    padding: 10px;
+    background-color: #ffcc00;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s;
+}
+
+.trip-info button:hover {
+    background-color: #e6b800;
+}
+
+/* Right Section for Earnings and Profile */
+.right-section {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-left: 20px;
+}
+
+.right-section h2 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: #333;
+}
+
+.earnings {
+    margin-bottom: 30px;
+}
+
+.earnings h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.earnings p {
+    font-size: 1.2em;
+}
+
+.earnings .total {
+    font-weight: bold;
+    color: green;
+}
+
+.profile-settings {
+    margin-top: 30px;
+}
+
+.profile-settings h3 {
+    margin-bottom: 10px;
+}
+
+.profile-settings ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.profile-settings ul li {
+    margin-bottom: 10px;
+}
+
+.profile-settings ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s;
+}
+
+.profile-settings ul li a:hover {
+    color: #ffcc00;
+}
+
+.profile-settings ul li a i {
+    margin-right: 10px;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 0.9em;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .right-section {
+        margin-left: 0;
+        margin-top: 20px;
+    }
+
+    nav {
+        flex-direction: column;
+    }
+
+    nav a {
+        padding: 10px;
+        text-align: center;
+    }
+}

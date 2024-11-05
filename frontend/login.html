@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Signup</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+    <section>
+        <div class="leaves">
+            <!-- Add background decoration if needed -->
+        </div>
+        <img src="bg.jpg" class="bg">
+        <img src="girl.png" class="girl">
+        <img src="trees.png" class="trees">
+        
+
+        <div class="login">
+            <h2>Sign In</h2>
+            <div class="inputBox">
+                <input type="text" placeholder="Username" id="username">
+            </div>
+            <div class="inputBox">
+                <input type="password" placeholder="Password" id="password">
+            </div>
+            <div class="inputBox">
+                <input type="submit" value="Login" id="login-btn">
+            </div>
+            <div class="group">
+                <a href="#" id="forgot-password">Forgot Password</a>
+                <a href="#" id="signup-btn">Signup</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Handle login button click
+        document.getElementById('login-btn').addEventListener('click', function () {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Example of checking login (simple check here, you can add actual validation)
+            if (username && password) {
+                window.location.href = 'ambulance_tracker.html'; // Redirect back to the tracker page
+            } else {
+                alert('Please enter your username and password.');
+            }
+        });
+
+        // Handle signup button click
+        document.getElementById('signup-btn').addEventListener('click', function () {
+            // You can handle the signup process here
+            window.location.href = 'ambulance_tracker.html'; // Redirect after signup (for now same as login)
+        });
+    </script>
+</body>
+
+</html>

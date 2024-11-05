@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambulance Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        /* General Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #f7f7f7;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-container button {
+            margin-left: 10px;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #0056b3;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .auth-container button:hover {
+            background-color: #004494;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        #map {
+            flex: 2;
+            height: 100%;
+            border-right: 1px solid #ccc;
+        }
+
+        .info {
+            flex: 1;
+            padding: 20px;
+            background-color: #fff;
+            overflow-y: auto;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        /* Input Field Styles */
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input:focus, select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #003cff;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer .social-icons {
+            list-style: none;
+            padding: 0;
+        }
+
+        footer .social-icons li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        footer .social-icons a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#" id="driver-mode">Driver</a></li>
+                <li><a href="#" id="patient-mode">Patient</a></li>
+            </ul>
+        </nav>
+        <div class="auth-container">
+            <button class="sign-in">Sign In</button>
+            <button class="sign-up">Sign Up</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div id="map"></div>
+        <div class="info">
+            <div class="controls">
+                <h2>Live Location</h2>
+                <button id="update-location">Update Location</button>
+            </div>
+            <h3>Patient's Address:</h3>
+            <input type="text" id="patient-address" placeholder="Enter patient's address" />
+            <h3>Hospital Destination:</h3>
+            <input type="text" id="hospital-location" placeholder="Enter hospital destination" />
+            <h3>Emergency Details</h3>
+            <label for="emergency-type">Emergency Type:</label>
+            <select id="emergency-type">
+                <option value="heart-attack">Heart Attack</option>
+                <option value="stroke">Stroke</option>
+                <option value="accident">Accident</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="patient-name">Patient's Name:</label>
+            <input type="text" id="patient-name" value="John Doe" />
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Ambulance Tracker. All Rights Reserved.</p>
+        <ul class="social-icons">
+            <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+            <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+        </ul>
+    </footer>
+
+    <!-- External Libraries -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map and set view to Sion, Mumbai
+        var map = L.map('map').setView([19.0434, 72.8654], 13);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Event listeners for Sign In and Sign Up
+        document.querySelector('.sign-in').addEventListener('click', function () {
+            window.location.href = 'login.html'; // Redirect to login page
+        });
+
+        document.querySelector('.sign-up').addEventListener('click', function () {
+            window.location.href = 'login.html'; // Redirect to sign up page
+        });
+
+        // Event listeners to switch between Driver and Patient interfaces
+        document.getElementById('driver-mode').addEventListener('click', function () {
+            window.location.href = 'driver_interface.html'; // Redirect to driver interface page
+        });
+
+        document.getElementById('patient-mode').addEventListener('click', function () {
+            // Implement functionality for patient mode if necessary
+        });
+    </script>
+</body>
+
+</html>
